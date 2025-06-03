@@ -26,3 +26,26 @@ func (g *GameLogicService) GenerateComputerChoice() models.Choice {
 	randomIndex := g.rng.Intn(len(choices))
 	return choices[randomIndex]
 }
+
+func (g *GameLogicService) DetermineWinner(playerChoice, computerChoice models.Choice) models.GameResult {
+	// Handle tie cases
+	if playerChoice == computerChoice {
+		return models.Tie
+	}
+	// switch logic to determine winner
+	switch playerChoice {
+	case models.Rock:
+		if computerChoice == models.Scissors {
+			return models.Win
+		}
+	case models.Paper:
+		if computerChoice == models.Rock {
+			return models.Win
+		}
+	case models.Scissors:
+		if computerChoice == models.Paper {
+			return models.Win
+		}
+	}
+	return models.Lose
+}
