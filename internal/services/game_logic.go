@@ -116,7 +116,15 @@ func (g *GameLogicService) GetResultMessage(playerChoice, computerChoice models.
 
 	switch result {
 	case models.Win:
-		var resultMessage string = fmt.Sprintf("")
+		var beatMessage string = g.GetBeatMessage(playerChoice, computerChoice)
+		return fmt.Sprintf("%s%s You won! +&d coins", baseMessage, beatMessage, coinsEarned)
+	case models.Lose:
+		var beatMessage string = g.GetBeatMessage(playerChoice, computerChoice)
+		return fmt.Sprintf("%s%s You lost +%d coins :(", baseMessage, beatMessage, coinsEarned)
+	case models.Tie:
+		return fmt.Sprintf("%s It's a tie!", baseMessage)
+	default:
+		return baseMessage + "Unkown Result/ Error"
 	}
 
 }
