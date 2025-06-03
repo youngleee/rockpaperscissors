@@ -47,4 +47,20 @@ tmp/
 temp/
 
 # Log files
-*.log 
+*.log
+
+# Development and build artifacts
+dist/
+build/
+coverage.txt
+coverage.html
+
+# Air (hot reload) temporary files
+tmp/
+air_tmp/
+
+# Testing artifacts
+testdata/output/
+
+# Documentation is included in version control
+# docs/ - keep this tracked 
