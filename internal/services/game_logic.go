@@ -1,6 +1,7 @@
 package services
 
 import (
+	"fmt"
 	"math/rand"
 	"rockpaperscissors/internal/models"
 	"time"
@@ -95,4 +96,8 @@ func (g *GameLogicService) CalculateCoinsEarned(result models.GameResult, curren
 	// Calculate coins: base coins (10) * multiplier
 	const baseCoins = 10
 	return baseCoins * multiplier
+}
+
+func (g *GameLogicService) GetResultMessage(playerChoice, computerChoice models.Choice, result models.GameResult, coinsEarned int) string {
+	var baseMessage string = fmt.Sprintf("You chose %s, computer chose %s. ", playerChoice, computerChoice)
 }
