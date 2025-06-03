@@ -98,6 +98,25 @@ func (g *GameLogicService) CalculateCoinsEarned(result models.GameResult, curren
 	return baseCoins * multiplier
 }
 
+func (g *GameLogicService) GetBeatMessage(playerChoice, computerChoice models.Choice) string {
+	switch {
+	case winner == models.Rock && loser == models.Scissors:
+		return "Rock crushes Scissors!"
+	case winner == models.Paper && loser == models.Rock:
+		return "Paper smothers Rock!"
+	case winner == models.Scissors && loser == models.Paper:
+		return "Scissors snips Paper!"
+	default:
+		return ""
+	}
+}
+
 func (g *GameLogicService) GetResultMessage(playerChoice, computerChoice models.Choice, result models.GameResult, coinsEarned int) string {
-	var baseMessage string = fmt.Sprintf("You chose %s, computer chose %s. ", playerChoice, computerChoice)
+	var baseMessage string = fmt.Sprintf("You chose %s, computer chose %s. ", playerChoice, computerChoice) // cool syntax for string interpolation!
+
+	switch result {
+	case models.Win:
+		var resultMessage string = fmt.Sprintf("")
+	}
+
 }
