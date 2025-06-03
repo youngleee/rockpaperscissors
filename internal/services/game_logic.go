@@ -55,7 +55,7 @@ func (g *GameLogicService) DetermineWinner(playerChoice, computerChoice models.C
 func (g *GameLogicService) CalculateStreakMultiplier(currentStreak int) int {
 	switch {
 	case currentStreak == 0:
-		return 1
+		return 1 //return the reward multiplier
 	case currentStreak == 1:
 		return 2
 	case currentStreak == 2:
@@ -65,4 +65,17 @@ func (g *GameLogicService) CalculateStreakMultiplier(currentStreak int) int {
 	default:
 		return 5 // max multiplier is 5
 	}
+}
+
+// calculate the new streak after a game ends
+
+func (g *GameLogicService) CalculateNewStreak(currentStreak int, result models.GameResult) int {
+	if result == models.Win {
+		return currentStreak + 1
+	} else if result == models.Lose {
+		return 0
+	} else if result == models.Tie {
+		return currentStreak
+	}
+	return 0 // default
 }
