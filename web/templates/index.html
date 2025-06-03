@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .api-info {
+            background-color: #e8f4fd;
+            border: 1px solid #b6d7f2;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .endpoint {
+            background-color: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: monospace;
+        }
+        .method {
+            font-weight: bold;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🪨📄✂️ Rock Paper Scissors API</h1>
+        
+        <div class="api-info">
+            <h2>Welcome to the Rock Paper Scissors Game API!</h2>
+            <p>This is a portfolio project demonstrating a rewarded ad experience where players earn coins for winning games with a streak multiplier system.</p>
+            
+            <h3>Available API Endpoints:</h3>
+            
+            <div class="endpoint">
+                <span class="method">GET</span> /health - Health check
+            </div>
+            
+            <div class="endpoint">
+                <span class="method">POST</span> /api/users - Create new user
+            </div>
+            
+            <div class="endpoint">
+                <span class="method">GET</span> /api/users/:username - Get user information
+            </div>
+            
+            <div class="endpoint">
+                <span class="method">GET</span> /api/stats/:username - Get user statistics
+            </div>
+            
+            <div class="endpoint">
+                <span class="method">POST</span> /api/play - Play a game round
+            </div>
+            
+            <div class="endpoint">
+                <span class="method">GET</span> /api/leaderboard - Get leaderboard
+            </div>
+            
+            <div class="endpoint">
+                <span class="method">GET</span> /api/users/:username/games - Get user game history
+            </div>
+            
+            <h3>Game Rules:</h3>
+            <ul>
+                <li>Rock beats Scissors</li>
+                <li>Scissors beats Paper</li>
+                <li>Paper beats Rock</li>
+                <li>Win streaks multiply coin rewards: 1x → 2x → 3x → 4x (max)</li>
+                <li>Base coin reward: 10 coins per win</li>
+            </ul>
+            
+            <p><strong>Tech Stack:</strong> Go + Gin + SQLite</p>
+        </div>
+    </div>
+</body>
+</html> 
