@@ -27,6 +27,7 @@ func (g *GameLogicService) GenerateComputerChoice() models.Choice {
 	return choices[randomIndex]
 }
 
+// determine the winner depending on who player and computer choice
 func (g *GameLogicService) DetermineWinner(playerChoice, computerChoice models.Choice) models.GameResult {
 	// Handle tie cases
 	if playerChoice == computerChoice {
@@ -34,7 +35,7 @@ func (g *GameLogicService) DetermineWinner(playerChoice, computerChoice models.C
 	}
 	// switch logic to determine winner
 	switch playerChoice {
-	case models.Rock:
+	case models.Rock: // player plays rock, if computer plays scissors, player wins
 		if computerChoice == models.Scissors {
 			return models.Win
 		}
@@ -48,4 +49,20 @@ func (g *GameLogicService) DetermineWinner(playerChoice, computerChoice models.C
 		}
 	}
 	return models.Lose
+}
+
+// streak multiplier logic with a cap of 5
+func (g *GameLogicService) CalculateStreakMultiplier(currentStreak int) int {
+	switch {
+	case currentStreak == 0:
+		return 1
+	case currentStreak == 1:
+		return 2
+	case currentStreak == 2:
+		return 3
+	case currentStreak == 3:
+		return 4
+	default:
+		return 5 // max multiplier is 5
+	}
 }
