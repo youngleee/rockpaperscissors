@@ -34,4 +34,28 @@ func TestGameLogicService(t *testing.T) {
 			t.Errorf("Rock should tie with Rock, Expected tie, got %s.", result)
 		}
 	})
+
+	// Test to check if streak multiplier is applied correctly
+	t.Run("CalculateStreakMultiplier", func(t *testing.T) {
+		multiplier := gameLogic.CalculateStreakMultiplier(0)
+		if multiplier != 1 {
+			t.Errorf("Streak: 0, Expected multiplier: 1, got %d.", multiplier)
+		}
+		multiplier = gameLogic.CalculateStreakMultiplier(1)
+		if multiplier != 2 {
+			t.Errorf("Streak: 1, Expected multiplier: 2, got %d.", multiplier)
+		}
+		multiplier = gameLogic.CalculateStreakMultiplier(2)
+		if multiplier != 3 {
+			t.Errorf("Streak: 2, Expected multiplier: 3, got %d.", multiplier)
+		}
+		multiplier = gameLogic.CalculateStreakMultiplier(3)
+		if multiplier != 4 {
+			t.Errorf("Streak: 3, Expected multiplier: 4, got %d.", multiplier)
+		}
+		multiplier = gameLogic.CalculateStreakMultiplier(4)
+		if multiplier != 5 {
+			t.Errorf("Streak: 4, Expected multiplier: 5, got %d.", multiplier)
+		}
+	})
 }
