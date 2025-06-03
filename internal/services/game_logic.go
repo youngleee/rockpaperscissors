@@ -98,7 +98,7 @@ func (g *GameLogicService) CalculateCoinsEarned(result models.GameResult, curren
 	return baseCoins * multiplier
 }
 
-func (g *GameLogicService) GetBeatMessage(playerChoice, computerChoice models.Choice) string {
+func (g *GameLogicService) GetBeatMessage(winner, loser models.Choice) string {
 	switch {
 	case winner == models.Rock && loser == models.Scissors:
 		return "Rock crushes Scissors!"
@@ -117,14 +117,13 @@ func (g *GameLogicService) GetResultMessage(playerChoice, computerChoice models.
 	switch result {
 	case models.Win:
 		var beatMessage string = g.GetBeatMessage(playerChoice, computerChoice)
-		return fmt.Sprintf("%s%s You won! +&d coins", baseMessage, beatMessage, coinsEarned)
+		return fmt.Sprintf("%s%s You won! +%d coins", baseMessage, beatMessage, coinsEarned)
 	case models.Lose:
-		var beatMessage string = g.GetBeatMessage(playerChoice, computerChoice)
-		return fmt.Sprintf("%s%s You lost +%d coins :(", baseMessage, beatMessage, coinsEarned)
+		var beatMessage string = g.GetBeatMessage(computerChoice, playerChoice) // Computer beat player
+		return fmt.Sprintf("%s%s You lost!", baseMessage, beatMessage)
 	case models.Tie:
-		return fmt.Sprintf("%s It's a tie!", baseMessage)
+		return fmt.Sprintf("%s It's a tie! No coins earned, but streak preserved.", baseMessage)
 	default:
-		return baseMessage + "Unkown Result/ Error"
+		return baseMessage + "Unknown Result/Error"
 	}
-
 }

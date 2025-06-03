@@ -186,7 +186,7 @@ Think of it like a membership card:
 ┌─────────────────────────┐
 │   ARCADE MEMBERSHIP     │
 │                         │
-│ ID: 12345              │
+│ ID: 12345               │
 │ Username: john123       │
 │ Total Coins: 150        │
 │ Games Played: 25        │

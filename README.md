@@ -80,6 +80,5 @@ Run with hot reload (requires air):
 air
 ```
 
-## License
 
 This project is for portfolio demonstration purposes. 
