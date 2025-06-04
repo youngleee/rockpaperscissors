@@ -58,4 +58,28 @@ func TestGameLogicService(t *testing.T) {
 			t.Errorf("Streak: 4, Expected multiplier: 5, got %d.", multiplier)
 		}
 	})
+
+	t.Run("GameScenario", func(t *testing.T) {
+		currentStreak := 1
+		multiplier := gameLogic.CalculateStreakMultiplier(currentStreak)
+		result := gameLogic.DetermineWinner(models.Rock, models.Scissors)
+		coinsEarned := gameLogic.CalculateCoinsEarned(result, currentStreak)
+		newStreak := gameLogic.CalculateNewStreak(currentStreak, result)
+		resultMessage := gameLogic.GetResultMessage(models.Rock, models.Scissors, result, coinsEarned)
+		if result != models.Win {
+			t.Errorf("Expected win, got %s.", result)
+		}
+		if multiplier != 2 {
+			t.Errorf("Expected multiplier: 2, got %d.", multiplier)
+		}
+		if coinsEarned != 30 {
+			t.Errorf("Expected 30 coins, got %d.", coinsEarned)
+		}
+		if newStreak != 2 {
+			t.Errorf("Expected streak: 2, got %d.", newStreak)
+		}
+		if resultMessage != "You chose rock, computer chose scissors. Rock crushes Scissors! You won! +30 coins" {
+			t.Errorf("Expected result message: 'You chose Rock, computer chose Scissors. Rock crushes Scissors! You won! +30 coins', got %s.", resultMessage)
+		}
+	})
 }
