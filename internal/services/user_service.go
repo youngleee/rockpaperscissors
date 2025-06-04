@@ -12,7 +12,7 @@ type UserService struct {
 	db *sql.DB
 }
 
-// NewUserService creates a new user service (new username/ password)
+// NewUserService creates a new user service
 func NewUserService(db *sql.DB) *UserService {
 	return &UserService{db: db}
 }
@@ -40,7 +40,13 @@ func (u *UserService) CreateUser(username string) (*models.User, error) {
 		return nil, fmt.Errorf("Failed to create user: %v", err)
 	}
 
+	userID, err := result.LastInsertId()
+	if err != nil {
+		return nil, fmt.Errorf("failed to get user ID: %v", err)
+	}
+
 	return &models.User{
+		ID:            int(userID),
 		Username:      username,
 		TotalCoins:    0,
 		CurrentStreak: 0,
