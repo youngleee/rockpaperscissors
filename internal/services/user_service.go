@@ -84,3 +84,11 @@ func (u *UserService) GetUser(username string) (*models.User, error) {
 	}
 	return &user, nil
 }
+
+func (u *UserService) UpdateUserStats(userID int, totalCoins int, currentStreak int, gamesPlayed int, gamesWon int) error {
+	query := `UPDATE users
+	          SET total_coins = ?, current_streak = ?, games_playeed = ?, games_won = ?,created_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
+			  WHERE id = ?`
+
+	return nil
+}
