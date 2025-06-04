@@ -87,11 +87,8 @@ func (g *GameLogicService) CalculateCoinsEarned(result models.GameResult, curren
 		return 0
 	}
 
-	// Calculate what the new streak will be after this win
-	newStreak := g.CalculateNewStreak(currentStreak, result)
-
-	// Get the multiplier for that new streak
-	multiplier := g.CalculateStreakMultiplier(newStreak)
+	// Get the multiplier for the CURRENT streak (not new streak)
+	multiplier := g.CalculateStreakMultiplier(currentStreak)
 
 	// Calculate coins: base coins (10) * multiplier
 	const baseCoins = 10
