@@ -23,7 +23,7 @@ func (u *UserService) CreateUser(username string) (*models.User, error) {
 	var count int
 	err := u.db.QueryRow(checkQuery, username).Scan(&count) // check if user exists
 	if err != nil {
-		return nil, fmt.Errorf("Failed to check if user exists: %v", err)
+		return nil, fmt.Errorf("failed to check if user exists: %v", err)
 	}
 	if count > 0 {
 		return nil, fmt.Errorf("user '%s' already exists", username)
@@ -37,7 +37,7 @@ func (u *UserService) CreateUser(username string) (*models.User, error) {
 	// create the user in database
 	result, err := u.db.Exec(insertQuery, username)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to create user: %v", err)
+		return nil, fmt.Errorf("failed to create user: %v", err)
 	}
 
 	userID, err := result.LastInsertId()
@@ -87,8 +87,20 @@ func (u *UserService) GetUser(username string) (*models.User, error) {
 
 func (u *UserService) UpdateUserStats(userID int, totalCoins int, currentStreak int, gamesPlayed int, gamesWon int) error {
 	query := `UPDATE users
-	          SET total_coins = ?, current_streak = ?, games_playeed = ?, games_won = ?,created_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
+	          SET total_coins = ?, current_streak = ?, games_played = ?, games_won = ?, updated_at = CURRENT_TIMESTAMP
 			  WHERE id = ?`
+	result, err := u.db.Exec(query, totalCoins, currentStreak, gamesPlayed, gamesWon, userID)
+	if err != nil {
+		return fmt.Errorf("failed to update user stats: %v", err)
+	}
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("failed to check update result: %v", err)
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("user with ID %d not found", userID)
+	}
 
 	return nil
 }
