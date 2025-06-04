@@ -56,3 +56,13 @@ func (u *UserService) CreateUser(username string) (*models.User, error) {
 		UpdatedAt:     time.Now(),
 	}, nil
 }
+
+func (u *UserService) GetUser(username string) (*models.User, error) {
+	query := `SELECT id, username, total_coins, current_streak, games_played, games_won, created_at, updated_at
+	          FROM users
+			  WHERE username = ?`
+
+	// TODO: Execute query and scan results into user struct
+
+	return nil, nil
+}
