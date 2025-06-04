@@ -63,6 +63,24 @@ func (u *UserService) GetUser(username string) (*models.User, error) {
 			  WHERE username = ?`
 
 	// TODO: Execute query and scan results into user struct
+	var user models.User
 
-	return nil, nil
+	err := u.db.QueryRow(query, username).Scan(
+		&user.ID,
+		&user.Username,
+		&user.TotalCoins,
+		&user.CurrentStreak,
+		&user.GamesPlayed,
+		&user.GamesWon,
+		&user.CreatedAt,
+		&user.UpdatedAt,
+	)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, fmt.Errorf("user '%s' not found", username)
+		}
+		return nil, fmt.Errorf("failed to get user: %v", err)
+	}
+	return &user, nil
 }
