@@ -4,17 +4,21 @@ import (
 	"database/sql"
 	"net/http"
 
+	"rockpaperscissors/internal/services"
+
 	"github.com/gin-gonic/gin"
 )
 
 // UserHandler handles user-related requests
 type UserHandler struct {
-	db *sql.DB
+	userService *services.UserService
 }
 
 // NewUserHandler creates a new user handler
 func NewUserHandler(db *sql.DB) *UserHandler {
-	return &UserHandler{db: db}
+	return &UserHandler{
+		userService: services.NewUserService(db),
+	}
 }
 
 // CreateUser creates a new user
