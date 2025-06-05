@@ -43,8 +43,8 @@ func (g *GameService) PlayGame(username string, playerChoice models.Choice) (*mo
 	newTotalCoins := user.TotalCoins + coinsEarned
 	newGamesPlayed := user.GamesPlayed + 1
 	newGamesWon := user.GamesWon
-	if result == models.win {
-		newGamesWon := user.GamesWon + 1
+	if result == models.Win {
+		newGamesWon++
 	}
 
 	err = g.userService.UpdateUserStats(user.ID, newTotalCoins, newStreak, newGamesPlayed, newGamesWon)
