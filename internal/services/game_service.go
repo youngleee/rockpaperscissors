@@ -46,10 +46,23 @@ func (g *GameService) PlayGame(username string, playerChoice models.Choice) (*mo
 	if result == models.Win {
 		newGamesWon++
 	}
-
+	// error handling
 	err = g.userService.UpdateUserStats(user.ID, newTotalCoins, newStreak, newGamesPlayed, newGamesWon)
 	if err != nil {
 		return nil, fmt.Errorf("failed to update user stats: %v for user: %s", err, username)
 	}
-	return nil, nil
+
+	// create response
+	message := g.gameLogic.GetResultMessage(playerChoice, computerChoice, result, coinsEarned)
+
+	return &models.PlayGameResponse{
+		PlayerChoice:     playerChoice,
+		ComputerChoice:   computerChoice,
+		Result:           result,
+		CoinsEarned:      coinsEarned,
+		StreakMultiplier: streakMultiplier,
+		NewStreak:        newStreak,
+		TotalCoins:       newTotalCoins,
+		Message:          message,
+	}, nil
 }
