@@ -33,4 +33,4 @@ func (h *GameHandler) GetUserGames(c *gin.Context) {
 		"message":  "GetUserGames endpoint - to be implemented",
 		"username": username,
 	})
-} 
+}

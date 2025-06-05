@@ -51,4 +51,4 @@ func (h *UserHandler) GetLeaderboard(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "GetLeaderboard endpoint - to be implemented",
 	})
-} 
+}
