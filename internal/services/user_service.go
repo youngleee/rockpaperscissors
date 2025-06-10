@@ -104,3 +104,63 @@ func (u *UserService) UpdateUserStats(userID int, totalCoins int, currentStreak 
 
 	return nil
 }
+
+// GetLeaderboard retrieves top users ordered by total coins
+func (u *UserService) GetLeaderboard(limit int) ([]models.LeaderboardEntry, error) {
+	if limit <= 0 {
+		limit = 10 // Default to top 10
+	}
+
+	query := `SELECT username, total_coins, current_streak, games_played, games_won, created_at, updated_at
+	          FROM users 
+			  ORDER BY total_coins DESC, games_won DESC 
+			  LIMIT ?`
+
+	rows, err := u.db.Query(query, limit)
+	if err != nil {
+		return nil, fmt.Errorf("failed to query leaderboard: %v", err)
+	}
+	defer rows.Close()
+
+	var leaderboard []models.LeaderboardEntry
+	rank := 1
+
+	for rows.Next() {
+		var user models.User
+		err := rows.Scan(
+			&user.Username,
+			&user.TotalCoins,
+			&user.CurrentStreak,
+			&user.GamesPlayed,
+			&user.GamesWon,
+			&user.CreatedAt,
+			&user.UpdatedAt,
+		)
+		if err != nil {
+			return nil, fmt.Errorf("failed to scan leaderboard row: %v", err)
+		}
+
+		// Calculate win rate
+		winRate := 0.0
+		if user.GamesPlayed > 0 {
+			winRate = float64(user.GamesWon) / float64(user.GamesPlayed)
+		}
+
+		leaderboard = append(leaderboard, models.LeaderboardEntry{
+			Rank:          rank,
+			Username:      user.Username,
+			TotalCoins:    user.TotalCoins,
+			GamesPlayed:   user.GamesPlayed,
+			GamesWon:      user.GamesWon,
+			WinRate:       winRate,
+			CurrentStreak: user.CurrentStreak,
+		})
+		rank++
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, fmt.Errorf("error iterating leaderboard rows: %v", err)
+	}
+
+	return leaderboard, nil
+}

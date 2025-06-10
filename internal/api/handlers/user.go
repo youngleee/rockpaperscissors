@@ -130,35 +130,11 @@ func (h *UserHandler) GetUserStats(c *gin.Context) {
 
 // GetLeaderboard retrieves the leaderboard
 func (h *UserHandler) GetLeaderboard(c *gin.Context) {
-	// Get top 10 users ordered by total coins
-	// Note: Accessing database through reflection to get the underlying db connection
-	// In production, this should be a proper UserService method
-
-	// For now, let's implement a basic version
-	// We'll get all users and sort them (not optimal, but works for small user base)
-
-	// Since we don't have direct db access here, we'll return a simple implementation
-	// that would work once we have sample data
-
-	leaderboard := []models.LeaderboardEntry{
-		{
-			Rank:          1,
-			Username:      "player1",
-			TotalCoins:    150,
-			GamesPlayed:   10,
-			GamesWon:      8,
-			WinRate:       0.8,
-			CurrentStreak: 3,
-		},
-		{
-			Rank:          2,
-			Username:      "player2",
-			TotalCoins:    120,
-			GamesPlayed:   8,
-			GamesWon:      5,
-			WinRate:       0.625,
-			CurrentStreak: 1,
-		},
+	// Get leaderboard from user service
+	leaderboard, err := h.userService.GetLeaderboard(10) // Top 10 users
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get leaderboard"})
+		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
