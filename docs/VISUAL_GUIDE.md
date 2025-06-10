@@ -16,40 +16,40 @@
                           │ HTTP Request
                           ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                    🏢 OUR GO SERVER                             │
+│                    🏢 OUR GO SERVER                            │
 │                                                                 │
-│  🚪 Router (Traffic Director)                                   │
-│  ├── Sees: POST /api/play                                      │
-│  ├── Thinks: "This goes to the game handler"                   │
-│  └── Routes to: GameHandler.PlayGame()                         │
+│  🚪 Router (Traffic Director)                                  │
+│  ├── Sees: POST /api/play                                       │
+│  ├── Thinks: "This goes to the game handler"                    │ 
+│  └── Routes to: GameHandler.PlayGame()                          │
 │                          │                                      │
 │                          ▼                                      │
-│  👔 Middleware (Security Guards)                               │
-│  ├── CORS: "Are you allowed to make this request?" ✅          │
-│  ├── JSON: "Let's make sure responses are JSON format"         │
-│  └── Error: "If anything goes wrong, handle it nicely"         │
+│  👔 Middleware (Security Guards)                                │
+│  ├── CORS: "Are you allowed to make this request?" ✅           │
+│  ├── JSON: "Let's make sure responses are JSON format"          │
+│  └── Error: "If anything goes wrong, handle it nicely"          │
 │                          │                                      │
-│                          ▼                                      │
+│                          ▼                                     │
 │  🎯 Handler (Receptionist)                                     │
-│  ├── Parses: "john123 wants to play rock"                     │
+│  ├── Parses: "john123 wants to play rock"                       │
 │  ├── Validates: "Is 'rock' a valid choice?" ✅                 │
-│  ├── Calls: GameService.PlayGame(john123, rock)               │
+│  ├── Calls: GameService.PlayGame(john123, rock)                 │
 │  └── Returns: JSON response                                     │
 │                          │                                      │
 │                          ▼                                      │
-│  🧠 Service (The Brain)                                        │
-│  ├── Gets user: UserService.GetUser("john123")                │
-│  ├── Computer picks: "scissors"                               │
-│  ├── Determines: "rock beats scissors = win!"                 │
-│  ├── Calculates: "streak=2, so 10 coins × 2 = 20 coins"      │
-│  ├── Updates user: +20 coins, streak=3                        │
-│  └── Records game in history                                   │
+│  🧠 Service (The Brain)                                         │
+│  ├── Gets user: UserService.GetUser("john123")                  │
+│  ├── Computer picks: "scissors"                                 │
+│  ├── Determines: "rock beats scissors = win!"                   │
+│  ├── Calculates: "streak=2, so 10 coins × 2 = 20 coins"         │
+│  ├── Updates user: +20 coins, streak=3                          │
+│  └── Records game in history                                    │
 │                          │                                      │
 │                          ▼                                      │
-│  🗄️ Database (Filing Cabinet)                                  │
-│  ├── Updates users table: john123 now has 170 coins           │
-│  ├── Inserts into games table: new game record                │
-│  └── Returns: success                                          │
+│  🗄️ Database (Filing Cabinet)                                   │
+│  ├── Updates users table: john123 now has 170 coins             │
+│  ├── Inserts into games table: new game record                  │
+│  └── Returns: success                                           │
 └─────────────────────────────────────────────────────────────────┘
 ```
 

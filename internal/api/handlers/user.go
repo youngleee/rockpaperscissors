@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"net/http"
 
+	"rockpaperscissors/internal/models"
 	"rockpaperscissors/internal/services"
 
 	"github.com/gin-gonic/gin"
@@ -23,10 +24,14 @@ func NewUserHandler(db *sql.DB) *UserHandler {
 
 // CreateUser creates a new user
 func (h *UserHandler) CreateUser(c *gin.Context) {
-	// TODO: Implement user creation
-	c.JSON(http.StatusOK, gin.H{
-		"message": "CreateUser endpoint - to be implemented",
-	})
+	var req models.CreateUserRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		// Return 400 Bad Request with the validation error
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// TODO: Continue implementation - call user service and handle response
 }
 
 // GetUser retrieves user information
