@@ -130,8 +130,19 @@ func (h *UserHandler) GetUserStats(c *gin.Context) {
 
 // GetLeaderboard retrieves the leaderboard
 func (h *UserHandler) GetLeaderboard(c *gin.Context) {
-	// TODO: Implement leaderboard
+	// TODO: Add GetLeaderboard method to UserService
+	// For now, return empty leaderboard as placeholder
+	// Should query: SELECT * FROM users ORDER BY total_coins DESC LIMIT 10
+
+	leaderboard := []models.LeaderboardEntry{}
+
+	// Placeholder implementation - in real version, would:
+	// 1. Call h.userService.GetLeaderboard()
+	// 2. Calculate win rates for each user
+	// 3. Assign ranks (1, 2, 3, etc.)
+
 	c.JSON(http.StatusOK, gin.H{
-		"message": "GetLeaderboard endpoint - to be implemented",
+		"leaderboard": leaderboard,
+		"total_users": 0,
 	})
 }
