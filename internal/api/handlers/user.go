@@ -3,6 +3,7 @@ package handlers
 import (
 	"database/sql"
 	"net/http"
+	"strings"
 
 	"rockpaperscissors/internal/models"
 	"rockpaperscissors/internal/services"
@@ -31,16 +32,65 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 		return
 	}
 
-	// TODO: Continue implementation - call user service and handle response
+	user, err := h.userService.CreateUser(req.Username)
+	if err != nil {
+		// Check if it's a duplicate user error
+		if strings.Contains(err.Error(), "already exists") {
+			c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
+			return
+		}
+		// Other database errors
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
+		return
+	}
+
+	// Calculate win rate (0 for new users)
+	winRate := 0.0
+	if user.GamesPlayed > 0 {
+		winRate = float64(user.GamesWon) / float64(user.GamesPlayed)
+	}
+
+	c.JSON(http.StatusCreated, models.UserResponse{
+		ID:            user.ID,
+		Username:      user.Username,
+		TotalCoins:    user.TotalCoins,
+		CurrentStreak: user.CurrentStreak,
+		GamesPlayed:   user.GamesPlayed,
+		GamesWon:      user.GamesWon,
+		WinRate:       winRate,
+	})
 }
 
 // GetUser retrieves user information
 func (h *UserHandler) GetUser(c *gin.Context) {
-	// TODO: Implement user retrieval
 	username := c.Param("username")
-	c.JSON(http.StatusOK, gin.H{
-		"message":  "GetUser endpoint - to be implemented",
-		"username": username,
+
+	user, err := h.userService.GetUser(username)
+	if err != nil {
+		// Check if it's a "user not found" error
+		if strings.Contains(err.Error(), "not found") {
+			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+			return
+		}
+		// Other database errors
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user"})
+		return
+	}
+
+	// Calculate win rate
+	winRate := 0.0
+	if user.GamesPlayed > 0 {
+		winRate = float64(user.GamesWon) / float64(user.GamesPlayed)
+	}
+
+	c.JSON(http.StatusOK, models.UserResponse{
+		ID:            user.ID,
+		Username:      user.Username,
+		TotalCoins:    user.TotalCoins,
+		CurrentStreak: user.CurrentStreak,
+		GamesPlayed:   user.GamesPlayed,
+		GamesWon:      user.GamesWon,
+		WinRate:       winRate,
 	})
 }
 
