@@ -96,11 +96,35 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 
 // GetUserStats retrieves user statistics
 func (h *UserHandler) GetUserStats(c *gin.Context) {
-	// TODO: Implement user stats retrieval
 	username := c.Param("username")
-	c.JSON(http.StatusOK, gin.H{
-		"message":  "GetUserStats endpoint - to be implemented",
-		"username": username,
+
+	user, err := h.userService.GetUser(username)
+	if err != nil {
+		// Check if it's a "user not found" error
+		if strings.Contains(err.Error(), "not found") {
+			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+			return
+		}
+		// Other database errors
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user"})
+		return
+	}
+
+	// Calculate win rate
+	winRate := 0.0
+	if user.GamesPlayed > 0 {
+		winRate = float64(user.GamesWon) / float64(user.GamesPlayed)
+	}
+
+	// Calculate rank - count users with more coins + 1
+	// For now, we'll add a simple method to calculate rank
+	// TODO: Move this logic to UserService for better architecture
+	rank := 1 // Default rank, should be calculated from database
+
+	c.JSON(http.StatusOK, models.UserStats{
+		User:    *user,
+		WinRate: winRate,
+		Rank:    rank,
 	})
 }
 
