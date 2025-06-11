@@ -3,6 +3,7 @@ package handlers
 import (
 	"database/sql"
 	"net/http"
+	"strings"
 
 	"rockpaperscissors/internal/models"
 	"rockpaperscissors/internal/services"
@@ -24,11 +25,25 @@ func NewGameHandler(db *sql.DB) *GameHandler {
 
 // GetUserGames retrieves game history for a user
 func (h *GameHandler) GetUserGames(c *gin.Context) {
-	// TODO: Implement game history retrieval
 	username := c.Param("username")
+
+	// Get game history from game service
+	games, err := h.gameService.GetUserGameHistory(username, 20) // Last 20 games
+	if err != nil {
+		// Check if it's a "user not found" error
+		if strings.Contains(err.Error(), "not found") {
+			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+			return
+		}
+		// Other database errors
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get game history"})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
-		"message":  "GetUserGames endpoint - to be implemented",
-		"username": username,
+		"username":    username,
+		"games":       games,
+		"total_games": len(games),
 	})
 }
 
