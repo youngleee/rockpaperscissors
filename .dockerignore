@@ -1,0 +1,48 @@
+# Exclude unnecessary files from Docker build context
+
+# Git
+.git
+.gitignore
+
+# Documentation
+README.md
+docs/
+*.md
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+*.exe
+rockpaperscissors.exe
+main
+dist/
+build/
+
+# Test files
+*_test.go
+test-*.ps1
+
+# SQLite database (will be created in container)
+data/*.db
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
+temp/
+
+# Docker files (don't copy Dockerfile into itself)
+Dockerfile*
+docker-compose*.yml
+
+# Node modules (if any)
+node_modules/ 
