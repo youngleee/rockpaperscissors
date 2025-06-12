@@ -3,94 +3,552 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ .title }}</title>
+    <title>🪨📄✂️ Rock Paper Scissors</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-        .container {
-            background-color: white;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        h1 {
-            text-align: center;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: #333;
         }
-        .api-info {
-            background-color: #e8f4fd;
-            border: 1px solid #b6d7f2;
-            border-radius: 5px;
-            padding: 20px;
-            margin: 20px 0;
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            backdrop-filter: blur(10px);
         }
-        .endpoint {
-            background-color: #f8f9fa;
-            border-left: 4px solid #007bff;
-            padding: 10px;
-            margin: 10px 0;
-            font-family: monospace;
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        .method {
+
+        .user-section {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .user-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        input[type="text"] {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            flex: 1;
+            min-width: 200px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
             font-weight: bold;
-            color: #007bff;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 120px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-choice {
+            background: white;
+            border: 3px solid #ddd;
+            font-size: 3rem;
+            padding: 1rem;
+            margin: 10px;
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            transition: all 0.3s;
+        }
+
+        .btn-choice:hover {
+            border-color: #667eea;
+            transform: scale(1.1);
+        }
+
+        .btn-choice:active {
+            transform: scale(0.95);
+        }
+
+        .game-section {
+            margin: 2rem 0;
+        }
+
+        .choices {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .user-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        .game-result {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            display: none;
+        }
+
+        .result-win {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .result-lose {
+            background: linear-gradient(45deg, #f44336, #da190b);
+            color: white;
+        }
+
+        .result-tie {
+            background: linear-gradient(45deg, #ff9800, #f57c00);
+            color: white;
+        }
+
+        .leaderboard {
+            margin-top: 2rem;
+            text-align: left;
+        }
+
+        .leaderboard h3 {
+            text-align: center;
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .rank {
+            font-weight: bold;
+            color: #667eea;
+            margin-right: 10px;
+        }
+
+        .loading {
+            display: none;
+            margin: 1rem 0;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .error {
+            color: #f44336;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #ffebee;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .success {
+            color: #4CAF50;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #e8f5e8;
+            border-radius: 8px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .btn-choice {
+                font-size: 2rem;
+                width: 80px;
+                height: 80px;
+            }
+            
+            .user-input {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🪨📄✂️ Rock Paper Scissors API</h1>
+        <h1>🪨📄✂️ Rock Paper Scissors</h1>
         
-        <div class="api-info">
-            <h2>Welcome to the Rock Paper Scissors Game API!</h2>
-            <p>This is a portfolio project demonstrating a rewarded ad experience where players earn coins for winning games with a streak multiplier system.</p>
-            
-            <h3>Available API Endpoints:</h3>
-            
-            <div class="endpoint">
-                <span class="method">GET</span> /health - Health check
+        <!-- User Section -->
+        <div class="user-section">
+            <div class="user-input">
+                <input type="text" id="usernameInput" placeholder="Enter your username" maxlength="20">
+                <button class="btn-primary" onclick="createOrLoginUser()">Join Game</button>
             </div>
-            
-            <div class="endpoint">
-                <span class="method">POST</span> /api/users - Create new user
+            <div id="errorMessage" class="error"></div>
+            <div id="successMessage" class="success"></div>
+        </div>
+
+        <!-- User Stats -->
+        <div id="userStats" class="user-stats hidden">
+            <div class="stat-card">
+                <div class="stat-value" id="totalCoins">0</div>
+                <div class="stat-label">💰 Coins</div>
             </div>
-            
-            <div class="endpoint">
-                <span class="method">GET</span> /api/users/:username - Get user information
+            <div class="stat-card">
+                <div class="stat-value" id="currentStreak">0</div>
+                <div class="stat-label">🔥 Streak</div>
             </div>
-            
-            <div class="endpoint">
-                <span class="method">GET</span> /api/stats/:username - Get user statistics
+            <div class="stat-card">
+                <div class="stat-value" id="gamesWon">0</div>
+                <div class="stat-label">🏆 Wins</div>
             </div>
-            
-            <div class="endpoint">
-                <span class="method">POST</span> /api/play - Play a game round
+            <div class="stat-card">
+                <div class="stat-value" id="gamesPlayed">0</div>
+                <div class="stat-label">🎮 Games</div>
             </div>
-            
-            <div class="endpoint">
-                <span class="method">GET</span> /api/leaderboard - Get leaderboard
+        </div>
+
+        <!-- Game Section -->
+        <div id="gameSection" class="game-section hidden">
+            <h2>Choose your weapon!</h2>
+            <div class="choices">
+                <button class="btn-choice" onclick="playGame('rock')" title="Rock">🪨</button>
+                <button class="btn-choice" onclick="playGame('paper')" title="Paper">📄</button>
+                <button class="btn-choice" onclick="playGame('scissors')" title="Scissors">✂️</button>
             </div>
-            
-            <div class="endpoint">
-                <span class="method">GET</span> /api/users/:username/games - Get user game history
-            </div>
-            
-            <h3>Game Rules:</h3>
-            <ul>
-                <li>Rock beats Scissors</li>
-                <li>Scissors beats Paper</li>
-                <li>Paper beats Rock</li>
-                <li>Win streaks multiply coin rewards: 1x → 2x → 3x → 4x (max)</li>
-                <li>Base coin reward: 10 coins per win</li>
-            </ul>
-            
-            <p><strong>Tech Stack:</strong> Go + Gin + SQLite</p>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Playing game...</p>
+        </div>
+
+        <!-- Game Result -->
+        <div id="gameResult" class="game-result">
+            <div id="resultText"></div>
+            <div id="battleDisplay" style="margin: 1rem 0; font-size: 2rem;"></div>
+            <div id="coinsEarned"></div>
+        </div>
+
+        <!-- Leaderboard -->
+        <div id="leaderboard" class="leaderboard hidden">
+            <h3>🏆 Leaderboard</h3>
+            <div id="leaderboardList"></div>
+            <button class="btn-primary" onclick="loadLeaderboard()" style="margin-top: 1rem;">Refresh Leaderboard</button>
         </div>
     </div>
+
+    <script>
+        let currentUser = null;
+        const API_BASE = 'http://localhost:8080/api';
+
+        // Show/hide loading spinner
+        function showLoading(show = true) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        }
+
+        // Show error message
+        function showError(message) {
+            const errorEl = document.getElementById('errorMessage');
+            errorEl.textContent = message;
+            errorEl.style.display = 'block';
+            setTimeout(() => errorEl.style.display = 'none', 5000);
+        }
+
+        // Show success message
+        function showSuccess(message) {
+            const successEl = document.getElementById('successMessage');
+            successEl.textContent = message;
+            successEl.style.display = 'block';
+            setTimeout(() => successEl.style.display = 'none', 3000);
+        }
+
+        // Create or login user
+        async function createOrLoginUser() {
+            const username = document.getElementById('usernameInput').value.trim();
+            if (!username) {
+                showError('Please enter a username');
+                return;
+            }
+
+            showLoading();
+            
+            try {
+                // Try to get existing user first
+                let response = await fetch(`${API_BASE}/users/${username}`);
+                
+                if (response.ok) {
+                    currentUser = await response.json();
+                    showSuccess(`Welcome back, ${username}!`);
+                } else if (response.status === 404) {
+                    // User doesn't exist, create new one
+                    response = await fetch(`${API_BASE}/users`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ username })
+                    });
+                    
+                    if (response.ok) {
+                        currentUser = await response.json();
+                        showSuccess(`Welcome to the game, ${username}!`);
+                    } else {
+                        throw new Error('Failed to create user');
+                    }
+                } else {
+                    throw new Error('Failed to connect');
+                }
+
+                updateUserStats();
+                showGameSection();
+                loadLeaderboard();
+                
+            } catch (error) {
+                showError('Failed to join game. Make sure the server is running!');
+                console.error('Error:', error);
+            }
+            
+            showLoading(false);
+        }
+
+        // Update user stats display
+        function updateUserStats() {
+            if (!currentUser) return;
+            
+            document.getElementById('totalCoins').textContent = currentUser.total_coins || 0;
+            document.getElementById('currentStreak').textContent = currentUser.current_streak || 0;
+            document.getElementById('gamesWon').textContent = currentUser.games_won || 0;
+            document.getElementById('gamesPlayed').textContent = currentUser.games_played || 0;
+            
+            document.getElementById('userStats').classList.remove('hidden');
+        }
+
+        // Show game section
+        function showGameSection() {
+            document.getElementById('gameSection').classList.remove('hidden');
+            document.getElementById('leaderboard').classList.remove('hidden');
+        }
+
+        // Play game
+        async function playGame(choice) {
+            if (!currentUser) {
+                showError('Please join the game first!');
+                return;
+            }
+
+            showLoading();
+            document.getElementById('gameResult').style.display = 'none';
+            
+            try {
+                const response = await fetch(`${API_BASE}/play`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: currentUser.username,
+                        player_choice: choice
+                    })
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    displayGameResult(result);
+                    
+                    // Update user stats
+                    currentUser.total_coins = result.total_coins;
+                    currentUser.current_streak = result.new_streak;
+                    currentUser.games_played += 1;
+                    if (result.result === 'win') currentUser.games_won += 1;
+                    
+                    updateUserStats();
+                    loadLeaderboard();
+                } else {
+                    throw new Error('Failed to play game');
+                }
+                
+            } catch (error) {
+                showError('Failed to play game. Try again!');
+                console.error('Error:', error);
+            }
+            
+            showLoading(false);
+        }
+
+        // Display game result
+        function displayGameResult(result) {
+            const resultEl = document.getElementById('gameResult');
+            const resultTextEl = document.getElementById('resultText');
+            const battleEl = document.getElementById('battleDisplay');
+            const coinsEl = document.getElementById('coinsEarned');
+
+            // Set battle display
+            const choiceEmojis = { rock: '🪨', paper: '📄', scissors: '✂️' };
+            battleEl.innerHTML = `${choiceEmojis[result.player_choice]} VS ${choiceEmojis[result.computer_choice]}`;
+
+            // Set result text
+            resultTextEl.textContent = result.message;
+
+            // Set coins earned
+            if (result.coins_earned > 0) {
+                coinsEl.innerHTML = `<strong>+${result.coins_earned} coins!</strong> 💰`;
+            } else {
+                coinsEl.textContent = '';
+            }
+
+            // Set result styling
+            resultEl.className = 'game-result';
+            if (result.result === 'win') {
+                resultEl.classList.add('result-win');
+            } else if (result.result === 'lose') {
+                resultEl.classList.add('result-lose');
+            } else {
+                resultEl.classList.add('result-tie');
+            }
+
+            resultEl.style.display = 'block';
+        }
+
+        // Load leaderboard
+        async function loadLeaderboard() {
+            try {
+                const response = await fetch(`${API_BASE}/leaderboard`);
+                if (response.ok) {
+                    const data = await response.json();
+                    // Backend returns {leaderboard: [...], total_users: N}
+                    displayLeaderboard(data.leaderboard || []);
+                }
+            } catch (error) {
+                console.error('Failed to load leaderboard:', error);
+            }
+        }
+
+        // Display leaderboard
+        function displayLeaderboard(leaderboard) {
+            const listEl = document.getElementById('leaderboardList');
+            
+            if (!leaderboard || leaderboard.length === 0) {
+                listEl.innerHTML = '<p style="text-align: center; color: #666;">No players yet!</p>';
+                return;
+            }
+
+            listEl.innerHTML = leaderboard.map(player => `
+                <div class="leaderboard-item">
+                    <div>
+                        <span class="rank">#${player.rank}</span>
+                        <strong>${player.username}</strong>
+                    </div>
+                    <div>
+                        <span style="color: #667eea; font-weight: bold;">${player.total_coins} 💰</span>
+                        <span style="margin-left: 10px; font-size: 0.9rem; color: #666;">
+                            ${player.games_won}/${player.games_played} wins
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Handle Enter key in username input
+        document.getElementById('usernameInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                createOrLoginUser();
+            }
+        });
+
+        // Load leaderboard on page load
+        window.addEventListener('load', () => {
+            loadLeaderboard();
+        });
+    </script>
 </body>
 </html> 
