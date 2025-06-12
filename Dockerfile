@@ -1,11 +1,15 @@
 # Build stage
-FROM golang:1.21-alpine AS builder
+FROM golang:1.21-bullseye AS builder
 
 # Set working directory
 WORKDIR /app
 
 # Install build dependencies
-RUN apk add --no-cache gcc musl-dev sqlite-dev
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libc6-dev \
+    libsqlite3-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy go mod files
 COPY go.mod go.sum ./
@@ -16,17 +20,18 @@ RUN go mod download
 # Copy source code
 COPY . .
 
-# Build the application with proper SQLite flags for Alpine
-RUN CGO_ENABLED=1 GOOS=linux go build \
-    -ldflags '-linkmode external -extldflags "-static"' \
-    -tags sqlite_omit_load_extension \
-    -o main cmd/server/main.go
+# Build the application
+RUN CGO_ENABLED=1 GOOS=linux go build -o main cmd/server/main.go
 
 # Runtime stage
-FROM alpine:latest
+FROM debian:bullseye-slim
 
 # Install runtime dependencies
-RUN apk --no-cache add ca-certificates sqlite
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    sqlite3 \
+    wget \
+    && rm -rf /var/lib/apt/lists/*
 
 # Create app directory
 WORKDIR /root/

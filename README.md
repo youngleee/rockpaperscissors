@@ -1,12 +1,12 @@
 # 🪨📄✂️ Rock Paper Scissors
 
-[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Available-brightgreen)](https://your-render-url.onrender.com)
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Available-brightgreen)](https://rockpaperscissorsgo-ei6j.onrender.com)
 [![Docker](https://img.shields.io/badge/🐳_Docker-Ready-blue)](https://hub.docker.com)
 [![Go Version](https://img.shields.io/badge/Go-1.21+-00ADD8)](https://golang.org)
 
 A full-stack Rock Paper Scissors game built with **Go** and modern web technologies. Features a beautiful interactive frontend, comprehensive REST API, streak multiplier system, leaderboard, and containerized deployment.
 
-> **Live Demo**: [Play Now!](https://your-render-url.onrender.com) 🎮
+> **Live Demo**: [Play Now!](https://rockpaperscissorsgo-ei6j.onrender.com) 🎮
 
 ## ✨ Features
 
@@ -318,5 +318,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
   <br><br>
   Made with ❤️ and Go
   <br>
-  <a href="https://your-render-url.onrender.com">🚀 Play Live Demo</a>
+  <a href="https://rockpaperscissorsgo-ei6j.onrender.com">🚀 Play Live Demo</a>
 </div> 
