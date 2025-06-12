@@ -333,7 +333,8 @@
 
     <script>
         let currentUser = null;
-        const API_BASE = 'http://localhost:8080/api';
+        // Automatically detect the correct API URL - works both locally and deployed
+        const API_BASE = window.location.origin + '/api';
 
         // Show/hide loading spinner
         function showLoading(show = true) {
