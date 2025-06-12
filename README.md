@@ -6,7 +6,15 @@
 
 A full-stack Rock Paper Scissors game built with **Go** and modern web technologies. Features a beautiful interactive frontend, comprehensive REST API, streak multiplier system, leaderboard, and containerized deployment.
 
-> **Live Demo**: [Play Now!](https://rockpaperscissorsgo-ei6j.onrender.com) 🎮
+<div align="center">
+
+## 🎮 **[► PLAY THE GAME NOW ◄](https://rockpaperscissorsgo-ei6j.onrender.com)** 🎮
+
+[![Play Now](https://img.shields.io/badge/🎮_PLAY_NOW-LIVE_DEMO-ff6b6b?style=for-the-badge&logoColor=white&logo=gamepad2)](https://rockpaperscissorsgo-ei6j.onrender.com)
+
+**👆 Click above to play the live game! 👆**
+
+</div>
 
 ## ✨ Features
 
