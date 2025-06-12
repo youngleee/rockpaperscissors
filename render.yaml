@@ -2,7 +2,7 @@ services:
   - type: web
     name: rockpaperscissors
     env: docker
-    dockerfilePath: ./Dockerfile
+    dockerfilePath: ./Dockerfile.debian
     plan: free
     healthCheckPath: /health
     envVars:
