@@ -313,7 +313,7 @@
         <!-- Loading Spinner -->
         <div id="loading" class="loading">
             <div class="spinner"></div>
-            <p>Playing game...</p>
+            <p id="loadingText">Loading...</p>
         </div>
 
         <!-- Game Result -->
@@ -337,8 +337,16 @@
         const API_BASE = window.location.origin + '/api';
 
         // Show/hide loading spinner
-        function showLoading(show = true) {
-            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        function showLoading(show = true, text = 'Loading...') {
+            const loadingEl = document.getElementById('loading');
+            const loadingTextEl = document.getElementById('loadingText');
+            
+            if (show) {
+                loadingTextEl.textContent = text;
+                loadingEl.style.display = 'block';
+            } else {
+                loadingEl.style.display = 'none';
+            }
         }
 
         // Show error message
@@ -365,26 +373,49 @@
                 return;
             }
 
-            showLoading();
+            showLoading(true, 'Connecting to game server...');
+            
+            // Show immediate cold start information
+            showSuccess('🚀 Connecting to game server... If this is your first visit, the app may take 15-30 seconds to wake up from sleep. Please be patient!');
+            
+            // Show additional encouragement after 3 seconds
+            setTimeout(() => {
+                if (document.getElementById('loading').style.display !== 'none') {
+                    showSuccess('⏳ Still waking up the server... Almost ready! This only happens on the first visit.');
+                    document.getElementById('loadingText').textContent = 'Waking up server...';
+                }
+            }, 3000);
+            
+            // Show persistence message after 10 seconds
+            setTimeout(() => {
+                if (document.getElementById('loading').style.display !== 'none') {
+                    showSuccess('🔄 Server is starting up... Thanks for your patience! The game will be lightning fast once connected.');
+                    document.getElementById('loadingText').textContent = 'Server starting up...';
+                }
+            }, 10000);
             
             try {
                 // Try to get existing user first
-                let response = await fetch(`${API_BASE}/users/${username}`);
+                let response = await fetch(`${API_BASE}/users/${username}`, {
+                    signal: AbortSignal.timeout(60000) // Increased to 60 seconds for cold starts
+                });
                 
                 if (response.ok) {
                     currentUser = await response.json();
-                    showSuccess(`Welcome back, ${username}!`);
+                    showSuccess(`🎉 Welcome back, ${username}! Server is warmed up and ready to play!`);
                 } else if (response.status === 404) {
                     // User doesn't exist, create new one
+                    document.getElementById('loadingText').textContent = 'Creating your account...';
                     response = await fetch(`${API_BASE}/users`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ username })
+                        body: JSON.stringify({ username }),
+                        signal: AbortSignal.timeout(60000)
                     });
                     
                     if (response.ok) {
                         currentUser = await response.json();
-                        showSuccess(`Welcome to the game, ${username}!`);
+                        showSuccess(`🎉 Welcome to the game, ${username}! Ready to play Rock Paper Scissors!`);
                     } else {
                         throw new Error('Failed to create user');
                     }
@@ -397,7 +428,11 @@
                 loadLeaderboard();
                 
             } catch (error) {
-                showError('Failed to join game. Make sure the server is running!');
+                if (error.name === 'TimeoutError') {
+                    showError('⏰ Connection timeout! The server might still be starting up. Please wait a moment and try again.');
+                } else {
+                    showError('🔄 Connection failed! The app may still be waking up from sleep. Please wait 30 seconds and try again for the best experience.');
+                }
                 console.error('Error:', error);
             }
             
@@ -429,7 +464,7 @@
                 return;
             }
 
-            showLoading();
+            showLoading(true, 'Playing your move...');
             document.getElementById('gameResult').style.display = 'none';
             
             try {
@@ -549,6 +584,16 @@
         // Load leaderboard on page load
         window.addEventListener('load', () => {
             loadLeaderboard();
+            
+            // Keep the app awake by pinging health endpoint every 10 minutes
+            setInterval(async () => {
+                try {
+                    await fetch('/health');
+                    console.log('Keep-alive ping sent');
+                } catch (error) {
+                    console.log('Keep-alive ping failed:', error);
+                }
+            }, 10 * 60 * 1000); // 10 minutes
         });
     </script>
 </body>
